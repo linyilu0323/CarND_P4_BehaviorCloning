@@ -18,6 +18,7 @@ The goals / steps of this project are the following:
 [image2]: ./examples/data_distribution_udacity.png "Adjusted population for Udacity dataset"
 [image3]: ./examples/data_distribution_myinput.png "Adjusted population for my dataset"
 [image4]: ./examples/track1_run1.gif "Results"
+[image5]: ./examples/MSE_evolve.png	"MSE vs Epochs"
 
 ---
 ### Files Submitted
@@ -65,8 +66,8 @@ I created a subfunction called `generate_training_data(ALL_X, ALL_Y, batch_size)
 
 - **Collecting Training Data:** I acquired training data by running the simulator in "training mode", I drove the first track in forward direction one lap, then backward direction another lap.
 - **Generalize Training Data Distribution:** Once the raw image data (file paths and steering angles) are loaded, the first thing I did was to check the distribution of number of training images vs. the steering angle. Imagining driving on the road, the most frequent steering angle would be no steering at all. Too many training data at one or few outputs might result in over-fitting or biased model, so I used a pre-processing algorithm (`preprocess_population()`) to generalize the distribution of training data. Below charts show the distribution of training data before and after the adjustment.
-	![alt text][image2]
-	![alt text][image3]
+  ![alt text][image2]
+  ![alt text][image3]
 - **Augmenting Training Data:** an easy way to get more training data and also avoid over-fitting is to flip the training image horizontally, in the same time, the steering angle needs to be reversed too. I implemented this feature inside the generator, so each time when loading a batch of training data, it will also flip the image.
 - **Separating Training and Validation Set:** I used `sklearn.model_selection.train_test_split` function to divide the original dataset into training and validation set, the validation set is 20% of the total original dataset.
 
@@ -74,6 +75,10 @@ I created a subfunction called `generate_training_data(ALL_X, ALL_Y, batch_size)
 
 ### Results and Discussion
 
-- **Model Training:** Training the model in workspace takes less than 30 minutes, thanks to the GPU power provided.  The loss function for both training set and validation set is less than 0.01.
+- **Model Training:** Training the model in workspace takes less than 10 minutes, thanks to the GPU power provided.  The loss function for both training set and validation set is less than 0.1. Below is a chart showing the MSE reduction over epochs:
+
+  ![alt text][image5]
+
 - **Running the model:** I ran the simulator in Autonomous mode with the trained `model.h5` file and the results are very clean - the model runs perfectly on the first track. Below is a few seconds from the course. A full video (`track1_run1.mp4`) is uploaded. Watch the simulator screen at [My Youtube Page](https://youtu.be/siMhdIWpB6M).
-![alt text][image4]
+
+  ![alt text][image4]
