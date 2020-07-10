@@ -1,7 +1,5 @@
 # **Behavioral Cloning**
 
-## Project Writeup
-
 ---
 
 **Behavioral Cloning Project**
@@ -20,9 +18,6 @@ The goals / steps of this project are the following:
 [image2]: ./examples/data_distribution_udacity.png "Adjusted population for Udacity dataset"
 [image3]: ./examples/data_distribution_myinput.png "Adjusted population for my dataset"
 [image4]: ./examples/track1_run1.gif "Results"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
-[image7]: ./examples/placeholder_small.png "Flipped Image"
 
 ---
 ### Files Submitted
@@ -35,24 +30,24 @@ This repo includes the following files:
 * `drive.py` - (Udacity provided) script to drive the car in autonomous mode
 * `track1_run1.mp4` - this is the front facing camera video generated during autonomous mode
 
-#### 2. How to drive in autonomous mode using trained model 
+#### 2. How to drive in autonomous mode using trained model
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing
 ```sh
 python drive.py model.h5
 ```
-
+---
 ### Model Architecture and Training Strategy
 
 #### 1. Model Architecture
 
 ![alt text][image1]
 
-Based on inputs from previous Udacity student (Paul Heraty, [Project Cheatsheet](https://s3-us-west-1.amazonaws.com/udacity-selfdrivingcar/Behavioral+Cloning+Cheatsheet+-+CarND.pdf)), I started my project with the model from NVidia autonomous vehicle group (Mariusz Bojarski et al., [End-to-End Deep Learning for Self-Driving Cars](https://developer.nvidia.com/blog/deep-learning-self-driving-cars/)). 
+Based on inputs from previous Udacity student (Paul Heraty, [Project Cheatsheet](https://s3-us-west-1.amazonaws.com/udacity-selfdrivingcar/Behavioral+Cloning+Cheatsheet+-+CarND.pdf)), I started my project with the model from NVidia autonomous vehicle group (Mariusz Bojarski et al., [End-to-End Deep Learning for Self-Driving Cars](https://developer.nvidia.com/blog/deep-learning-self-driving-cars/)).
 
 To maximize utilizing CNN's parallelization capability, I added a few layers in the very beginning of the network, they are:
 
-- **Normalization Layer:** this layer utilizes the `Lambda` layer from Keras, the images are normalized by `(x / 255.0) - 0.5`, it will result in a zero-mean 
-- **Cropping Layer:** this layer utilizes the `Cropping2D` layer from Keras, the images are cropped to only retain the most relative  information (middle of the view, removed top of the image where it's mostly sky, and bottom of the image where it's just the hood). 
+- **Normalization Layer:** this layer utilizes the `Lambda` layer from Keras, the images are normalized by `(x / 255.0) - 0.5`, it will result in a zero-mean
+- **Cropping Layer:** this layer utilizes the `Cropping2D` layer from Keras, the images are cropped to only retain the most relative  information (middle of the view, removed top of the image where it's mostly sky, and bottom of the image where it's just the hood).
 
 #### 2. Attempts to reduce overfitting in the model
 
@@ -68,16 +63,17 @@ I created a subfunction called `generate_training_data(ALL_X, ALL_Y, batch_size)
 
 #### 4. Appropriate training data
 
-- **Collecting Training Data:** I acquired training data by running the simulator in "training mode", I drove the first track in forward direction one lap, then backward direction another lap. 
+- **Collecting Training Data:** I acquired training data by running the simulator in "training mode", I drove the first track in forward direction one lap, then backward direction another lap.
 - **Generalize Training Data Distribution:** Once the raw image data (file paths and steering angles) are loaded, the first thing I did was to check the distribution of number of training images vs. the steering angle. Imagining driving on the road, the most frequent steering angle would be no steering at all. Too many training data at one or few outputs might result in over-fitting or biased model, so I used a pre-processing algorithm (`preprocess_population()`) to generalize the distribution of training data. Below charts show the distribution of training data before and after the adjustment.
 	![alt text][image2]
 	![alt text][image3]
 - **Augmenting Training Data:** an easy way to get more training data and also avoid over-fitting is to flip the training image horizontally, in the same time, the steering angle needs to be reversed too. I implemented this feature inside the generator, so each time when loading a batch of training data, it will also flip the image.
-- **Separating Training and Validation Set: ** I used `sklearn.model_selection.train_test_split` function to divide the original dataset into training and validation set, the validation set is 20% of the total original dataset.
+- **Separating Training and Validation Set:** I used `sklearn.model_selection.train_test_split` function to divide the original dataset into training and validation set, the validation set is 20% of the total original dataset.
 
-#### 5. Results and Discussion
+---
 
-- **Model Training: ** Training the model in workspace takes less than 30 minutes, thanks to the GPU power provided.  The loss function for both training set and validation set is less than 0.01.
-- **Running the model:** I ran the simulator in Autonomous mode with the trained `model.h5` file and the results are very clean - the model runs perfectly on the first track. Below is a few seconds from the course. A full video (`track1_run1.mp4`) is uploaded. Watch the simulator screen at [My Youtube Page](https://youtu.be/siMhdIWpB6M). 
+### Results and Discussion
+
+- **Model Training:** Training the model in workspace takes less than 30 minutes, thanks to the GPU power provided.  The loss function for both training set and validation set is less than 0.01.
+- **Running the model:** I ran the simulator in Autonomous mode with the trained `model.h5` file and the results are very clean - the model runs perfectly on the first track. Below is a few seconds from the course. A full video (`track1_run1.mp4`) is uploaded. Watch the simulator screen at [My Youtube Page](https://youtu.be/siMhdIWpB6M).
 ![alt text][image4]
-
